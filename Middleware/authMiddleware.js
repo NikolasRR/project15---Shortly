@@ -1,7 +1,5 @@
 import joi from "joi";
 
-import db from "../database.js";
-
 async function signUpDataVerification(req, res, next) {
     const signupSchema = joi.object({
         name: joi.string().required(),
@@ -17,18 +15,21 @@ async function signUpDataVerification(req, res, next) {
     }
 
     next();
-
-    // try {
-    //     db.query(`SELECT * FROM users WHERE email = $1`, [req.body.email]);
-
-    //     next();
-    // } catch (error) {
-    //     res.sendStatus(500)
-    // }
 }
 
 async function singInDataValidation(req, res, next) {
+    const signinSchema = joi.object({
+        email: joi.string().email().required(),
+        password: joi.string().required(),
+    });
 
+    const validation = signinSchema.validate(req.body, { abortEarly: false });
+
+    if (validation.error) {
+        return res.status(422).send(validation.error.details);
+    }
+
+    next();
 }
 
 export { signUpDataVerification, singInDataValidation }
