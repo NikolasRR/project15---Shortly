@@ -2,7 +2,7 @@ import { nanoid } from "nanoid";
 
 import db from "../database.js";
 
-async function shortenURL(req, res) {
+async function shortenURL (req, res) {
     const { id } = res.locals.user;
 
     try {
@@ -16,7 +16,7 @@ async function shortenURL(req, res) {
     }
 }
 
-async function getThisURL(req, res) {
+async function getThisURL (req, res) {
     const { id } = req.params;
 
     try {
@@ -37,11 +37,30 @@ async function getThisURL(req, res) {
     }
 }
 
-async function openThisURL(req, res) {
+async function openThisURL (req, res) {
+    const { shortUrl } = req.params;
 
+    try {
+        const result = await db.query(`
+            UPDATE urls 
+            SET clicks = clicks + 1 
+            WHERE "shortUrl" = $1
+            RETURNING *
+        `, [shortUrl]);
+
+        if (!result.rows[0]) {
+            return res.status(404).send('ShortUrl not found');
+        }
+
+        res.redirect(result.rows[0].url);
+
+    } catch (error) {
+        console.log(error);
+        res.sendStatus(500);
+    }
 }
 
-async function deleteThisURL(req, res) {
+async function deleteThisURL (req, res) {
 
 }
 
