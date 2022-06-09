@@ -33,7 +33,6 @@ async function signIn(req, res) {
         }
 
         delete user.rows[0].password;
-        delete user.rows[0].id;
 
         const config = { expiresIn: 60*60 };
         const token = jwt.sign(user.rows[0], process.env.JWT_SECRET, config);
