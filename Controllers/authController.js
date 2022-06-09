@@ -1,10 +1,8 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import dotenv from "dotenv";
 
 import db from "../database.js";
 
-dotenv.config({ path: '../.env' });
 
 async function signUp(req, res) {
     const { name, email, password } = req.body;
