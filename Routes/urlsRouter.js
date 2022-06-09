@@ -6,10 +6,10 @@ import { shortenURL, getThisURL, openThisURL, deleteThisURL } from "../Controlle
 
 const urlsRouter = express.Router();
 
-urlsRouter.post("/url/shorten", tokenVerifier, postedURLVerifier, shortenURL);
-urlsRouter.get("/url/:id", getThisURL);
+urlsRouter.post("/urls/shorten", tokenVerifier, postedURLVerifier, shortenURL);
+urlsRouter.get("/urls/:id", getThisURL);
 urlsRouter.get("/open/:shortUrl", openThisURL);
-urlsRouter.delete("/url/:id", deleteThisURL);
+urlsRouter.delete("/urls/:id", deleteThisURL);
 
 
 export default urlsRouter;
