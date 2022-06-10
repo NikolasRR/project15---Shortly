@@ -61,7 +61,22 @@ async function openThisURL (req, res) {
 }
 
 async function deleteThisURL (req, res) {
+    const userId = res.locals.user.id;
+    const urlId = req.params.id;
 
+    try {
+        const result = await db.query(`
+            DELETE FROM urls
+            WHERE id = $1 
+            HAVING "userId" = $2
+            RETURNING *
+        `, [urlId, userId]);
+        console.log(result);
+        res.send(result);
+    } catch (error) {
+        res.status(500).send(error)
+        console.log(error);
+    }
 }
 
 export { shortenURL, getThisURL, openThisURL, deleteThisURL };

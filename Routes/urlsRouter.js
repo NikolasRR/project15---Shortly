@@ -9,7 +9,7 @@ const urlsRouter = express.Router();
 urlsRouter.post("/urls/shorten", tokenVerifier, postedURLVerifier, shortenURL);
 urlsRouter.get("/urls/:id", getThisURL);
 urlsRouter.get("/urls/open/:shortUrl", openThisURL);
-urlsRouter.delete("/urls/:id", deleteThisURL);
+urlsRouter.delete("/urls/:id", tokenVerifier, deleteThisURL);
 
 
 export default urlsRouter;
