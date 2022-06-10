@@ -51,7 +51,8 @@ async function openThisURL (req, res) {
         if (!result.rows[0]) {
             return res.status(404).send('ShortUrl not found');
         }
-
+        
+        console.log(result.rows[0].url);
         res.redirect(result.rows[0].url);
 
     } catch (error) {
@@ -67,12 +68,21 @@ async function deleteThisURL (req, res) {
     try {
         const result = await db.query(`
             DELETE FROM urls
-            WHERE id = $1 
-            HAVING "userId" = $2
+            WHERE id = $1 AND "userId" = $2
             RETURNING *
         `, [urlId, userId]);
-        console.log(result);
-        res.send(result);
+        
+        if (!result.rows[0]) {
+            const newResult = await db.query(`SELECT * FROM urls WHERE id = $1`, [urlId]);
+
+            if (!newResult.rows[0]) {
+                return res.status(404).send('URL does not exist');
+            }
+
+            return res.status(401).send('URL does not belong to user');
+        }
+
+        res.sendStatus(204);
     } catch (error) {
         res.status(500).send(error)
         console.log(error);
