@@ -25,6 +25,7 @@ async function getThisURL (req, res) {
             return res.status(404).send('URL with passed ID does not exist');
         }
 
+        delete result.rows[0].createdAt;
         delete result.rows[0].clicks;
         delete result.rows[0].userId;
         return res.send(result.rows[0]);
